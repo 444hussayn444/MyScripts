@@ -1,0 +1,55 @@
+#!/bin/bash
+
+currentPath=$(pwd)
+
+mkdir "frontend"
+mkdir "backend"
+cd "$currentPath/frontend"
+mkdir "public"
+cd "public"
+echo >> index.html
+mkdir "js"
+mkdir "css"
+cd "js"
+echo >> main.js
+cd ..
+cd "css"
+echo >> style.css
+cd ..
+npm init -y
+npm install 
+cd ..
+cd .. 
+cd "$currentPath/backend"
+npm init -y
+npm install socket.io express nodemon mongoose bcrypt validator uuid jsonwebtoken cors dotenv
+mkdir controllers
+mkdir routes
+mkdir models
+echo >> server.js
+echo "
+import express from 'express';
+
+import cors from  'cors';
+
+import dotenv from 'dotenv';
+
+const app = express();
+
+app.get("/", (req, res) => {
+
+    res.send("hello");
+
+});
+
+app.listen(3000, ()=>{
+ 
+ console.log("server is running on port 3000")
+
+});
+
+" > server.js
+echo >> .env
+cd ..
+code .
+

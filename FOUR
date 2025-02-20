@@ -1,0 +1,95 @@
+#!/bin/bash
+
+current_path=$(pwd)
+
+if ! command -v npm &> /dev/null
+then
+    echo "npm not installed!"
+    exit
+fi
+
+if ! command -v npx &> /dev/null
+then
+    echo "npx not installed!"
+    exit
+fi
+
+mkdir react-frontend
+mkdir express-backend
+
+cd "$current_path/react-frontend"
+npx create-react-app@latest .
+sudo npm install @reduxjs/toolkit react-redux react-router-dom react-icons react-toastify axios uuid moment socket.io-client gsap --legacy-peer-deps
+
+rm src/setupTests.js
+rm src/App.test.js
+rm src/reportWebVitals.js
+
+echo "
+import React from 'react';
+
+function App() {
+  return (
+    <div></div>
+  );
+}
+
+export default App;
+" > src/App.js
+
+echo "" > src/App.css
+echo "" > src/index.css
+
+rm public/logo192.png
+rm public/logo512.png
+rm public/favicon.ico
+
+cd src
+mkdir components
+mkdir redux
+mkdir apis
+mkdir pages
+mkdir contexts
+mkdir middlewares
+cd redux
+mkdir store
+mkdir actions
+mkdir slices
+cd ..
+cd ..
+cd ..
+
+cd "$current_path/express-backend"
+npm init -y
+sudo npm install socket.io express nodemon mongoose bcrypt validator uuid jsonwebtoken cors dotenv
+
+mkdir controllers
+mkdir routes
+mkdir models
+
+echo "
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv';
+
+const app = express();
+
+dotenv.config({
+    path : './.env'
+})
+
+app.use(express.json())
+app.use(cors())
+
+app.get('/', (req, res) => {
+    res.send('hello');
+});
+
+app.listen(3000, ()=>{
+    console.log('server is running on port 3000')
+})
+" > server.js
+
+echo >> .env
+cd ..
+code .

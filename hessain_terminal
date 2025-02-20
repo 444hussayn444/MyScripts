@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# this command generate random pass and put it in specific text file
+# tr -dc 'a-z0-9!@#$%^&' < /dev/urandom | head -c12 > text.txtmy
+
+
+clear
+
+TerminalName=")4("
+
+echo -ne "\033]0;${TerminalName}\007"
+
+source ~/bin/getscript.sh
+
+saved_name=$(sed -n '1p' /home/hus/bin/text.txt)
+saved_pass=$(sed -n '2p' /home/hus/bin/text.txt)
+
+BOLD_GREEN='\033[1;32m'
+COLOR='\033[0;36m'
+COLORB='\033[1;36m'
+RED='\033[0;33m'
+RESET='\033[0m'
+
+if [ -n "$ZSH_VERSION" ]; then
+    HISTFILE=~/.zsh_history
+    HISTSIZE=1000
+    SAVEHIST=1000
+    HISTCONTROL=ignoredups
+    setopt APPEND_HISTORY
+else
+    HISTFILE=~/.bash_history
+    HISTSIZE=1000
+    HISTCONTROL=ignoredups
+    shopt -s histappend
+fi
+
+while true
+do
+    read -p "enter your name : " name
+    read -sp "enter your password: " passowrd
+    if [[ $saved_name != "" && $name != $saved_name ]]; then
+        echo -ne -e "${RED}wrong Name or Password${RESET}\n"
+        continue
+    fi
+    if [[ $saved_pass != "" && $passowrd != $saved_pass ]]; then
+        echo -ne -e "${RED}wrong Name or Password${RESET}\n"
+        continue
+    fi
+    break
+    
+done
+
+echo -e "\n✅ Login successful! Welcome, $name."
+
+
+
+
+
+print_title(){
+    
+    echo -e "${COLOR}$(figlet -c -w $(tput cols) "${TerminalName} ")${RESET}"
+}
+
+no_exit_hahah(){
+    clear
+    echo -ne "${RED}⚠️YOU ONLY CAN EXIT WITH exit KEY WORD⚠️${RESET}\n"
+}
+
+
+trap print_title WINCH
+
+trap no_exit_hahah SIGINT
+
+print_title
+
+while true
+do
+    echo -ne "${BOLD_GREEN})4(${RESET}$(pwd)${BOLD_GREEN})4(${RESET}:~$ "
+    tput smkx
+    read -e -p  "$(echo -ne "${COLOR}")" command
+    history -a
+    echo -ne ${RESET}
+    if [[ $command == "exit" ]]; then
+        echo "good bye huss"
+        break
+    fi
+    if [[ $command == "clear"  || $command == "cls" ]]; then
+        clear
+        print_title
+        continue
+    fi
+    if [[ $command == "his" || $command == "history" ]]; then
+        history -r $HISTFILE
+        history
+        continue
+    fi
+    if [[ $command != "" ]]; then
+        echo -e "${COLORB}"
+        eval "$command"
+        echo -e "${RESET}"
+    fi
+    if [[ $command == "getPro" ]]; then
+        getProject
+    fi
+done
