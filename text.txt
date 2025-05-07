@@ -1,2 +1,7 @@
-hessain
-123
+
+
+
+
+// if you came here, you can user hessain_terminal just from fun, but before using it you need to put your name and password here
+firstline  -> name  //
+secondline -> password //
